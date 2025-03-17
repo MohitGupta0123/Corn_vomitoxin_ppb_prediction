@@ -1,5 +1,9 @@
 # 🌽 Corn Vomitoxin Prediction (DeepCorn Project)
 
+![Docker Version](https://img.shields.io/docker/v/mohit472/deepcorn_model?label=Docker%20Version)
+
+![Python Version](https://img.shields.io/badge/python-3.12.4-blue)
+
 ## 📝 **Project Overview**
 This repository contains a complete pipeline for predicting vomitoxin_ppb concentration in corn samples using both Machine Learning and Deep Learning approaches.
 
