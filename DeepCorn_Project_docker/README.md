@@ -1,62 +1,170 @@
-# DeepCorn Model v2 - Dockerized Version
+# 🚀 DeepCorn Model Inference API (Dockerized)
 
-## 🚀 How to Run the Model:
+## 📜 **Overview**
+This repository contains a Dockerized Flask API for running inference using the `DeepCornModelV2`, a PyTorch-based deep learning model for predicting vomitoxin_ppb concentration in corn samples using spectral reflectance at different wavelengths.
 
-### Case 1: If you just run model/Docker Image `(deepcorn_model.tar)`
+The API takes input in JSON format, processes the input data, and returns predictions.
 
-#### ✅ Step 0: in DeepCorn_Project_docker run these commands
+---
 
-#### ✅ Step 1: Load Docker Image
-```bash
-docker load -i deepcorn_model.tar
+## 🌟 **Folder Structure**
+```
+DeepCorn_Model/
+│
+├── app/
+│   ├── predict.py            # Flask API
+│   ├── model.py              # PyTorch Model
+│   ├── test.py               # Test Script
+│   ├── requirements.txt      # Python Dependencies
+│   ├── cols_to_drop.txt      # Columns to Drop
+│   └── DeepCorn_Best_Model_optimized.pth   # Pre-trained Model
+│
+├── Dockerfile                 # Dockerfile to Create Image
+└── README.md                  # This Documentation
 ```
 
-#### ✅ Step 2: Run Docker Container
+---
+
+## 🛠️ **Step 1: Install Docker (If Not Installed)**
+- For Ubuntu:
 ```bash
-docker run -d -p 5000:5000 deepcorn_model:v1
+sudo apt-get install docker.io
 ```
 
-#### ✅ Step 3: Run Test Input (test.py) in new terminal 
-##### for new input just give input in nested dictionary format in Input key in '0':0.47556 format
+- For Windows/Mac:
+Download from [Docker Official Website](https://www.docker.com/products/docker-desktop/)
+
+---
+
+## 📦 **Step 2: Pull the Docker Image from Docker Hub**
+
+The Docker image is already pushed to Docker Hub.
+
 ```bash
-python test.py
+docker pull mohit472/deepcorn_model:v1
 ```
 
-### Case 2: If you build Docker Image `(deepcorn_model.tar)`
+---
 
-#### ✅ Step 0: in DeepCorn_Project_docker run these commands
+## 🔥 **Step 3: Run the Docker Container**
 
-#### ✅ Step 1: Build Docker Image
+```bash
+docker run -p 5000:5000 mohit472/deepcorn_model:v1
+```
+
+- `-p 5000:5000`: Maps container port `5000` to local port `5000`
+- `mohit472`: My Docker Hub username
+
+---
+
+## ✅ **Step 4: Test the API (Using test.py)**
+
+In your local new terminal, run the test script to make a POST request to the running Flask API:
+
+```python
+import requests
+
+input_data = {
+  'input': {
+    '40': 0.5,   # Red Band
+    '100': 0.7,  # NIR Band
+    '200': 0.3   # SWIR Band
+    .
+    .
+    .
+  }
+}
+
+response = requests.post('http://localhost:5000/predict', json=input_data)
+print(response.json())
+
+# For my model you need to give scaled value from final_scaled_df.csv as input format that have values for column '0' to '447' spectral reflectance bands and my model will take necessary columns needed for prediction.
+
+```
+
+### 🎯 Sample Output:
+```json
+{
+  "predictions": [0.7532]
+}
+```
+
+---
+
+## 🗃️ **Files Description**
+
+| File/Folder             | Description                                                    |
+|----------------|------------------------------------------------------|
+| `predict.py`        | Main Flask API for Model Inference                               |
+| `model.py`          | PyTorch Model Architecture and Weights Loading          |
+| `test.py`               | For Testing the API Locally                                             |
+| `requirements.txt` | Python Packages Required                                     |
+| `cols_to_drop.txt` | List of Columns to Drop from Input Data                    |
+| `DeepCorn_Best_Model_optimized.pth` | Pre-trained Model Weights                       |
+| `Dockerfile`             | Dockerfile for Building the Docker Image                      |
+
+---
+
+## 🎯 **If You Want to Build Docker Image Manually (Optional)**
+
 ```bash
 docker build -t deepcorn_model:v1 .
 ```
 
-#### ✅ Step 2: Run Docker Container
+---
+
+## 📤 **If You Want to Push Image by building new image to Docker Hub (Optional)**
+
 ```bash
-docker run -d -p 5000:5000 deepcorn_model:v1
+# Login to Docker Hub
+
+docker login
+
+# Tag the Docker Image
+docker tag deepcorn_model:v1 <dockerhub_username>/deepcorn_model:v1
+
+# Push the Image to Docker Hub
+docker push <dockerhub_username>/deepcorn_model:v1
 ```
 
-#### ✅ Step 3: Run Test Input (test.py) in new terminal
-##### for new input just give input in nested dictionary format in Input key in '0':0.47556 format
+---
+
+## 🛑 **How Your Anyone Can Use the Docker Image**
+
+1️⃣ Pull the Image:
+```bash
+docker pull mohit472/deepcorn_model:v1
+```
+
+2️⃣ Run the Container:
+```bash
+docker run -p 5000:5000 mohit472/deepcorn_model:v1
+```
+
+3️⃣ Make Predictions via API:
 ```bash
 python test.py
 ```
 
-### Case 3: If you Just want to see output
+---
 
-#### ✅ Step 0: Download `deepcorn_model.tar` and `test.py` and make sure docker in installed in your device and active
+## 🎯 **Future Improvements**
+- Add logging for better monitoring.
+- Deploy on Cloud using AWS/GCP/Azure.
+- Add Docker Compose for multi-container setup.
 
-#### ✅ Step 1: Load Docker Image
-```bash
-docker load -i deepcorn_model.tar
-```
+---
 
-#### ✅ Step 2: Run Docker Container
-```bash
-docker run -d -p 5000:5000 deepcorn_model:v1
-```
+## ✅ **References**
+- Flask
+- PyTorch
+- Docker
 
-#### ✅ Step 3: Run Test Input (test.py) in new terminal 
-##### for new input just give input in nested dictionary format in Input key in '0':0.47556 format
-```bash
-python test.py
+---
+
+## ⭐️ **If you like this repository, give it a star 🌟**
+
+---
+
+## 📞 **Contact Me**
+[LinkedIn Profile](https://www.linkedin.com/in/mohitgupta012/)  |  [GitHub](https://github.com/MohitGupta0123)
